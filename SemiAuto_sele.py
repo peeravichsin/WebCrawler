@@ -1,4 +1,3 @@
-from importlib.resources import path
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -21,14 +20,14 @@ def govspend(st_date, en_date, project_number, file_name):
     try:
 
         #temporary use until 21 june 2022 
-        # Close_popup = WebDriverWait(driver, 3).until(
-        # EC.presence_of_element_located((By.ID, "home-popup-close-button")))
+        Close_popup = WebDriverWait(driver, 3).until(
+        EC.presence_of_element_located((By.ID, "home-popup-close-button")))
 
-        # if Close_popup:
-        #     Close_popup.click()
+        if Close_popup.is_displayed():
+            Close_popup.click()
 
-        # else: 
-        #     pass
+        else: 
+            pass
         ###  Get into website ###
 
         search_link = WebDriverWait(driver, 3).until(
@@ -78,6 +77,7 @@ def govspend(st_date, en_date, project_number, file_name):
         btn=[2,3,4,5,6,7]   # list of index for change page
         itn=['ข้อมูลรายชื่อผู้ยื่นเอกสาร','ข้อมูลรายชื่อผู้ผ่านการพิจารณาคุณสมบัติและเทคนิค','ข้อมูลสาระสำคัญในสัญญา']
         check = 0
+        project_number = int(project_number)//50
         no_of_proj = int(project_number) # number of project that you want
     
         

@@ -1,14 +1,16 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import filedialog
 import SemiAuto_sele, DBD_coltd, DBD_plc, DBD_lp
+
+
+
 
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title('DataCrwaler')
-        self.geometry('700x500+450+150')
-        self.config(bg='#D9D8D7')
+        self.title('DataCrawler')
+        self.geometry('800x800+400+0')
+        self.config(bg='#EEEED5')
         self._frame = None
         self.switch_frame(StartPage)
 
@@ -26,53 +28,55 @@ class SampleApp(tk.Tk):
 class StartPage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.config(bg='#D9D8D7')
-        tk.Label(self, text="โปรแกรมสำหรับดึงของมูลจากเว็บไซต์", font=("Arial",25)).pack(side="top", fill="x", pady=10, ipadx=10, ipady=10)
+        self.config(bg='#EEEED5')
 
-        tk.Button(self, text="กรมบัญชีกลาง",font=("Arial",10),
-                  command=lambda: master.switch_frame(PageOne)).pack(side="top",  pady=10, ipadx=10, ipady=10)
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="โปรแกรมสำหรับดึงข้อมูลจากเว็บไซต์", font=("Tahoma",30)).pack(side="top", fill="x", pady=10, ipadx=10, ipady=10)
+      
+        tk.Button(self, bg='#4682B4', fg='#FFFAFA', text="กรมบัญชีกลาง",font=("Tahoma",20),
+                  command=lambda: master.switch_frame(PageOne)).pack(side="top",  fill="x",pady=10, ipadx=10, ipady=10)
 
-        tk.Button(self, text="กรมพัฒนาธุรกิจการค้า บริษัทจำกัด",font=("Arial",10),
-                  command=lambda: master.switch_frame(PageTwo)).pack(side="top",  pady=10, ipadx=10, ipady=10)
+        tk.Button(self, bg='#8968CD', fg='#FFFAFA',text="กรมพัฒนาธุรกิจการค้า บริษัทจำกัด",font=("Tahoma",20),
+                  command=lambda: master.switch_frame(PageTwo)).pack(side="top",  fill="x",pady=10, ipadx=10, ipady=10)
 
-        tk.Button(self, text="กรมพัฒนาธุรกิจการค้า บริษัทจำกัดมหาชน",font=("Arial",10),
-                  command=lambda: master.switch_frame(PageThree)).pack(side="top",  pady=10, ipadx=10, ipady=10)
+        tk.Button(self, bg='#8968CD', fg='#FFFAFA',text="กรมพัฒนาธุรกิจการค้า บริษัทจำกัดมหาชน",font=("Tahoma",20),
+                  command=lambda: master.switch_frame(PageThree)).pack(side="top",  fill="x",pady=10, ipadx=10, ipady=10)
 
-        tk.Button(self, text="กรมพัฒนาธุรกิจการค้า ห้างหุ้นส่วนจำกัด",font=("Arial",10),
-                  command=lambda: master.switch_frame(PageFour)).pack(side="top",  pady=10, ipadx=10, ipady=10)
+        tk.Button(self, bg='#8968CD', fg='#FFFAFA',text="กรมพัฒนาธุรกิจการค้า ห้างหุ้นส่วนจำกัด",font=("Tahoma",20),
+                  command=lambda: master.switch_frame(PageFour)).pack(side="top",  fill="x",pady=10, ipadx=10, ipady=10)
 
-        tk.Button(self, text="ปิด",font=("Arial",10),
-                  command=lambda: self.quit()).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, bg='#CD3333', fg='#000000',text="X ปิด",font=("Tahoma",20),
+                  command=lambda: self.quit()).pack(side='top', fill="x",pady=50, ipadx=10, ipady=10)
         
     
 
 class PageOne(tk.Frame):
     def __init__(self, master):
-        tk.Frame.__init__(self, master)
-        self.config(bg='#D9D8D7')
-        tk.Label(self, text="กรมบัญชีกลาง", font=("Arial",25)).pack(side="top", fill="x", pady=10)
+        tk.Frame.__init__(self, master ,width=1000, height=1000)
+        self.config(bg='#EEEED5')
 
-        tk.Label(self, text="จำนวนโครงการ", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        pno = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="กรมบัญชีกลาง", font=("Tahoma",30)).pack(side="top", fill="x", pady=10)
+
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="จำนวนโครงการ", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
+        pno = tk.Entry(self, width=30, font=("Tahoma",20)) 
         pno.pack(side="top", fill="x", pady=10)
 
-        tk.Label(self, text="วันที่ต้องการจะเริ่มดึงข้อมูล", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        sdate = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="วันที่ต้องการจะเริ่มดึงข้อมูล", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
+        sdate = tk.Entry(self,  width=30, font=("Tahoma",20)) 
         sdate.pack(side="top", fill="x", pady=10)
 
-        tk.Label(self, text="วันสุดท้ายต้องการจะดึงข้อมูล", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        edate = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="วันสุดท้ายต้องการจะดึงข้อมูล", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
+        edate = tk.Entry(self,  width=30, font=("Tahoma",20)) 
         edate.pack(side="top", fill="x", pady=10)
 
-        tk.Label(self, text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        fname = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
+        fname = tk.Entry(self,  width=30, font=("Tahoma",20)) 
         fname.pack(side="top", fill="x", pady=10)
 
-        tk.Button(self, text="เริ่มดึงข้อมูล",
+        tk.Button(self, bg='#4682B4', fg='#FFFAFA',text="เริ่มดึงข้อมูล", font=("Tahoma",18),
                   command=lambda: SemiAuto_sele.govspend(st_date = sdate.get(), en_date=edate.get(), project_number = pno.get(), file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
         
-        tk.Button(self, text="กลับ",
-                  command=lambda: master.switch_frame(StartPage)).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, text="กลับ", font=("Tahoma",18),
+                  command=lambda: master.switch_frame(StartPage)).pack(side='top', pady=30, ipadx=10, ipady=10)
         
         
 
@@ -81,51 +85,54 @@ class PageOne(tk.Frame):
 class PageTwo(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.config(bg='#D9D8D7')
-        tk.Label(self, text="บริษัทจำกัด", font=("Arial",25)).pack(side="top", fill="x", pady=10)
+        self.config(bg='#EEEED5')
 
-        tk.Label(self, text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        fname = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="บริษัทจำกัด", font=("Tahoma",30)).pack(side="top", fill="x", pady=10)
+
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Tahoma",20)).pack(side="top", fill="x", pady=10)
+        fname = tk.Entry(self, width=30, font=("Tahoma",20)) 
         fname.pack(side="top", fill="x", pady=10)
 
-        tk.Button(self, text="เริ่มดึงข้อมูล",
-                  command=lambda:  DBD_coltd.coltd(file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self,  bg='#8968CD', fg='#FFFAFA', text="เริ่มดึงข้อมูล", font=("Tahoma",20),
+                  command=lambda:  DBD_coltd.coltd(file_name = fname.get())).pack(side='top', pady=10, ipadx=10, ipady=10)
         
-        tk.Button(self, text="กลับ",
-                  command=lambda: master.switch_frame(StartPage)).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, text="กลับ", font=("Tahoma",20),
+                  command=lambda: master.switch_frame(StartPage)).pack(side='top', pady=10, ipadx=10, ipady=10)
 
 class PageThree(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.config(bg='#D9D8D7')
-        tk.Label(self, text="บริษัทจำกัดมหาชน", font=("Arial",25)).pack(side="top", fill="x", pady=10)
+        self.config(bg='#EEEED5')
 
-        tk.Label(self, text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        fname = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="บริษัทจำกัดมหาชน", font=("Tahoma",30)).pack(side="top", fill="x", pady=10)
+
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Tahoma",20)).pack(side="top", fill="x", pady=10)
+        fname = tk.Entry(self, width=30, font=("Tahoma",20)) 
         fname.pack(side="top", fill="x", pady=10)
 
-        tk.Button(self, text="เริ่มดึงข้อมูล",
-                  command=lambda:  DBD_plc.plc(file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, bg='#8968CD', fg='#FFFAFA', text="เริ่มดึงข้อมูล", font=("Tahoma",20),
+                  command=lambda:  DBD_plc.plc(file_name = fname.get())).pack(side='top', pady=10, ipadx=10, ipady=10)
         
-        tk.Button(self, text="กลับ",
-                  command=lambda: master.switch_frame(StartPage)).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, text="กลับ", font=("Tahoma",20),
+                  command=lambda: master.switch_frame(StartPage)).pack(side='top', pady=10, ipadx=10, ipady=10)
 
 
 class PageFour(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.config(bg='#D9D8D7')
-        tk.Label(self, text="ห้างหุ้นส่วนจำกัด", font=("Arial",25)).pack(side="top", fill="x", pady=10)
+        self.config(bg='#EEEED5')
 
-        tk.Label(self, text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Arial",10)).pack(side="top", fill="x", pady=10)
-        fname = tk.Entry(self,  width=30) 
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="ห้างหุ้นส่วนจำกัด", font=("Tahoma",30)).pack(side="top", fill="x", pady=10)
+
+        tk.Label(self, bg='#EEEED5', fg='#000000',text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Tahoma",20)).pack(side="top", fill="x", pady=10)
+        fname = tk.Entry(self, width=30, font=("Tahoma",20)) 
         fname.pack(side="top", fill="x", pady=10)
 
-        tk.Button(self, text="เริ่มดึงข้อมูล",
-                  command=lambda:  DBD_lp.lp(file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, bg='#8968CD', fg='#FFFAFA', text="เริ่มดึงข้อมูล", font=("Tahoma",20),
+                  command=lambda:  DBD_lp.lp(file_name = fname.get())).pack(side='top', pady=10, ipadx=10, ipady=10)
         
-        tk.Button(self, text="กลับ",
-                  command=lambda: master.switch_frame(StartPage)).pack(side='top', ipadx=10, ipady=10)
+        tk.Button(self, text="กลับ", font=("Tahoma",20),
+                  command=lambda: master.switch_frame(StartPage)).pack(side='top', pady=10, ipadx=10, ipady=10)
                 
 
 if __name__ == "__main__":
