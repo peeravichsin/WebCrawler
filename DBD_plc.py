@@ -9,11 +9,25 @@ from datetime import date
 today = date.today()
 
 import pandas as pd
-
 def plc(file_name):
     # For using Chrome
-    browser = webdriver.Chrome(r'.\sele\Cdriver\chromedriver.exe')
+    browser = webdriver.Chrome(r'.\Cdriver\chromedriver.exe')
     action = webdriver.ActionChains(browser)
+
+
+    #----------------------------------------------------------------------------------------
+
+    ##Function
+
+    def ThaiMonth2Num(month):
+        months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
+        Month_Num = months.index(month) + 1
+        mn = f"{Month_Num:02}"
+        return str(mn)
+
+    def BE2AD(year):
+        AD = int(year) - 543
+        return str(AD)
 
     #-----------------------------------------------------------------------------------------
 
@@ -22,75 +36,60 @@ def plc(file_name):
         browser.get('https://datawarehouse.dbd.go.th/login')
 
         ####Captcha Page(Close Pop-up)
-        close_button = browser.find_element(By.CLASS_NAME, 'btn.btn-secondary')
-        close_button.click()
+        close_button = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'btn.btn-secondary')))
+        browser.execute_script("arguments[0].click();", close_button)
 
         ####For type captcha by-hand
         time.sleep(20)
 
         ####Summit Button
-        summit_button = browser.find_element(By.CLASS_NAME, 'btn.btn-purple.btn-submit')
-        summit_button.click()
+        summit_button = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'btn.btn-purple.btn-submit')))
+        browser.execute_script("arguments[0].click();", summit_button)
 
         ####First Page(Searchbox)
-        search_box = browser.find_element(By.CLASS_NAME, 'form-control.tempTxt')
+        search_box = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'form-control.tempTxt')))
         search_box.send_keys('จำกัด')
 
-        search = browser.find_element(By.CLASS_NAME, 'btn.btn-link')
+        search = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'btn.btn-link')))
         time.sleep(2)
-        search.click()
+        browser.execute_script("arguments[0].click();", search)
 
-        sort = browser.find_element(By.CLASS_NAME, 'btn.btn-outline.btn-filter')
+        sort = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'btn.btn-outline.btn-filter')))
         time.sleep(2)
-        sort.click()
+        browser.execute_script("arguments[0].click();", sort)
 
         #----------------------------------------------------------------------------------------
         #XPATH ประเภทของบริษัท
         ##หากต้องการเข้าถึงข้อมูลบริษัทประเภทใดก็ให้ใช้เครื่องหมายสี่เหลี่ยม (#) ไว้ด้านหน้าประเภทบริษัทอื่นๆที่ไม่ต้องการจะดึงข้อมูล
 
         ####เลือกประเภทนิติบุคคล
-        Choose_type = browser.find_element(By.XPATH, '//*[@id="filterBoxContent"]/div[2]/h4')
+        Choose_type = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="filterBoxContent"]/div[2]/h4')))
         time.sleep(2)
-        Choose_type.click()
+        browser.execute_script("arguments[0].click();", Choose_type)
 
         #----------------------------------------------------------------------------------------
         ##ประเภทของนิติบุคคล
 
-        ####บริษัทจำกัด Company Limited
-        # CoLtd = browser.find_element(By.XPATH, '//*[@id="collapse2"]/div[2]/label')
-        # CoLtd.click()
-
-
         ####บริษัทมหาชนจำกัด Public Limited Company
-        PLC = browser.find_element(By.XPATH, '//*[@id="collapse2"]/div[1]/label')
+        PLC = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="collapse2"]/div[1]/label')))
         time.sleep(2)
-        PLC.click()
-
-        # ####ห้างหุ้นส่วนจำกัด Limited Partnership
-        # LP = browser.find_element(By.XPATH, '//*[@id="collapse2"]/div[3]/label')
-        # LP.click()
-
-        # browser.implicitly_wait(1)
+        browser.execute_script("arguments[0].click();", PLC)
 
         #----------------------------------------------------------------------------------------
 
 
         # ####เลือกสถานะ
         choose_status = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div[4]/div[2]/div/div[1]/div[1]/ul/li[3]/div/form/div[1]/div[3]/h4')))
-        choose_status.click()
+        browser.execute_script("arguments[0].click();", choose_status)
         time.sleep(5)
 
         # ####สถานะยังดำเนินกิจการอยู่
         status = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div[4]/div[2]/div/div[1]/div[1]/ul/li[3]/div/form/div[1]/div[3]/div/ul/li[1]/div[1]/label')))
-        status.click()
+        browser.execute_script("arguments[0].click();", status)
         time.sleep(5)
 
-        available = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div[4]/div[2]/div/div[1]/div[1]/ul/li[3]/div/form/div[1]/div[3]/div/ul/li[1]/div[2]/div[1]/label')))
-        available.click()
-        time.sleep(5)
-
-        confirm_button = browser.find_element(By.CLASS_NAME, 'btn.btn-link.btn-confirm')
-        confirm_button.click()
+        confirm_button = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, 'btn.btn-link.btn-confirm')))
+        browser.execute_script("arguments[0].click();", confirm_button)
         browser.implicitly_wait(60)
 
         
@@ -98,17 +97,17 @@ def plc(file_name):
 
 
         DBD = []
-        check = 0
-        page = 50  #135
-
+        check = 0 #0
+        page_num = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div[4]/div[2]/div/div[4]/div[1]/nav/ul/li[3]/span')))
+        time.sleep(3)
+        page = int((page_num.text).translate(str.maketrans({'/': '', ',': ''})))    #136
+        print(page)
 
         while check != page:
 
             link = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]')))
 
-            #status = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]/td[5]')))
             #province = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]/td[8]')))
-
 
             ####Go&Get Data in linkpage
             for i in range(len(link)):
@@ -121,11 +120,17 @@ def plc(file_name):
                     browser.execute_script("arguments[0].click();", num_box)
                     num_box.clear()
                     time.sleep(3)
-                    #num_box.send_keys(Keys.DELETE)
-                    ans_page = 63748 - (63748 - (check + 1))
+                    ans_page = page - (page - (check + 1))
                     num_box.send_keys(str(ans_page))
                     num_box.send_keys(Keys.ENTER)
                     browser.set_page_load_timeout(30)
+
+                #ตรวจสอบสถานะ
+                status = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]/td[5]')))
+                if status[i].text == 'ยังดำเนินกิจการอยู่':
+                    pass
+                else:
+                    break
 
                 #ชื่อนิติบุคคล
                 j_name = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]/td[3]')))
@@ -175,10 +180,13 @@ def plc(file_name):
                 link = WebDriverWait(browser, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="fixTable"]/tbody/tr[/]')))
                 browser.execute_script("arguments[0].click();", link[i])
 
+
                 #วันที่จดทะเบียนจัดตั้ง
                 regis_date = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH,'/html/body/div/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/table/tbody/tr[4]/td[2]')))
                 browser.set_page_load_timeout(30)
-                regis_date = regis_date.text
+                regis_date = (regis_date.text).split(' ')
+                regis_date = BE2AD(regis_date[2]) + '-' + ThaiMonth2Num(regis_date[1]) + '-' + regis_date[0]
+
 
                 #ที่ตั้ง
                 locate = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH,'/html/body/div/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div[1]/div[2]/table/tbody/tr[2]/td')))
@@ -204,10 +212,9 @@ def plc(file_name):
 
                 #กรรมการลงชื่อผูกพัน
                 authorized_director = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH,'/html/body/div/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div[3]/div[1]/div/p')))
-                browser.set_page_load_timeout(60)
-                authorized_director = authorized_director.text
-                authorized_director = authorized_director.replace('/', '')
-                authorized_director = authorized_director.replace('\n', '')
+                browser.set_page_load_timeout(120)
+                authorized_director = (authorized_director.text).translate(str.maketrans({'/': '', '\n': '', '-': ''}))
+
 
                 #------------------------------------------------------------------------------------------------------------------------------------------------
                 ####หน้าข้อมูลงบการเงิน
@@ -365,10 +372,6 @@ def plc(file_name):
                 time.sleep(2)
                 action.double_click(status).perform()
 
-                available = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div[4]/div[2]/div/div[1]/div[1]/ul/li[3]/div/form/div[1]/div[3]/div/ul/li[1]/div[2]/div[1]/label')))
-                time.sleep(2)
-                action.double_click(available).perform()
-
                 confirm_button = browser.find_element(By.CLASS_NAME, 'btn.btn-link.btn-confirm')
                 browser.execute_script("arguments[0].click();", confirm_button)
                 browser.set_page_load_timeout(30)
@@ -386,8 +389,7 @@ def plc(file_name):
                 browser.execute_script("arguments[0].click();", num_box)
                 num_box.clear()
                 time.sleep(3)
-                #num_box.send_keys(Keys.DELETE)
-                ans_page = 63748 - (63748 - (check + 1))
+                ans_page = page - (page - (check + 1))
                 num_box.send_keys(str(ans_page))
                 num_box.send_keys(Keys.ENTER)
                 browser.set_page_load_timeout(30)
@@ -395,12 +397,12 @@ def plc(file_name):
             check +=1
 
         df = pd.DataFrame(DBD)
-        df.to_excel(rf'.\sele\Data\{file_name}.xlsx', index = False, header=True)
+        df.to_excel(f'{file_name}.xlsx', index = False, header=True)
 
         #-----------------------------------------------------------------------------------------------------------------
         ##Change file format
 
-        df2 = pd.read_excel('DBD_CoLTD.xlsx')
+        df2 = pd.read_excel(f'{file_name}.xlsx')
 
         DBD2 = []
         for i in range(len(df2)):
@@ -435,7 +437,7 @@ def plc(file_name):
                 DBD2.append(detail2)
 
         df3 = pd.DataFrame(DBD2)
-        df3.to_excel(rf'.\sele\Data\{file_name}.xlsx', index = False, header=True)
+        df3.to_excel(f'{file_name}.xlsx', index = False, header=True)
 
     finally:
         print('Finished Scraping')

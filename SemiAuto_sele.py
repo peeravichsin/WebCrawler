@@ -1,21 +1,22 @@
 import pandas as pd
+import re
+from datetime import date as dadadate
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from time import sleep
 import datetime
-
-def govspend(st_date, en_date, project_number, file_name):
-    PATH = r'.\sele\Cdriver\chromedriver.exe'
+def govspend(st_date, en_date, file_name):
+    PATH = r'.\Cdriver\chromedriver.exe'
     driver = webdriver.Chrome(PATH)
     action = webdriver.ActionChains(driver)
 
     driver.get("http://www.gprocurement.go.th/new_index.html")
     
+    # CTRL+SHIFT+I
 
     try:
 
@@ -49,18 +50,37 @@ def govspend(st_date, en_date, project_number, file_name):
 
         select_method.select_by_index(2)
 
-        S_date = WebDriverWait(driver, 1).until(
+        stl_date = str(st_date).split('-')
+        enl_date = str(en_date).split('-')
+        print(st_date)
+        print(en_date)
+        stc_date = dadadate(int(stl_date[0]), int(stl_date[1]) , int(stl_date[2]))
+        enc_date = dadadate(int(enl_date[0]), int(enl_date[1]) , int(enl_date[2]))
+        delta = enc_date - stc_date
+
+        if delta.days <= 90:
+            st_date = stl_date[2] + stl_date[1] + str(int(stl_date[0]) + 543)
+            en_date = enl_date[2] + enl_date[1] + str(int(enl_date[0]) + 543)
+
+        else:
+            print('day is out of range for searching rule')
+
+
+        S_date = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located((By.ID, "announceSDate"))
         )
         S_date.send_keys(st_date)
-
-        E_date = WebDriverWait(driver, 1).until(
+        E_date = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located((By.ID, "announceEDate"))
         )
         E_date.send_keys(en_date)
-       
 
                             ###  User input here ###
+        # project_status = Select(WebDriverWait(driver, 2).until(
+        # EC.presence_of_element_located((By.ID, "projectStatus"))
+        # ))
+
+        # project_status.select_by_index(2)
 
         search = WebDriverWait(driver, 1).until(
             EC.presence_of_element_located((By.CLASS_NAME, "btnCommon"))
@@ -77,20 +97,19 @@ def govspend(st_date, en_date, project_number, file_name):
         btn=[2,3,4,5,6,7]   # list of index for change page
         itn=['ข้อมูลรายชื่อผู้ยื่นเอกสาร','ข้อมูลรายชื่อผู้ผ่านการพิจารณาคุณสมบัติและเทคนิค','ข้อมูลสาระสำคัญในสัญญา']
         check = 0
-        project_number = int(project_number)//50
-        no_of_proj = int(project_number) # number of project that you want
+        no_of_proj = 1
     
         
         while check != no_of_proj :
             per_page = 0
             no_link = WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.XPATH, '/html/body/form/table[1]/tbody/tr/td/table[3]/tbody/tr')))
             no_link = len(no_link)
+
             if no_link >= 50:
-                per_page = 50
+              per_page = 50
             elif no_link < 50 :
-                per_page = no_link
-            else:
-                per_page = 1
+              per_page = no_link - 1
+
             for i in range(per_page):
                 driver.implicitly_wait(60)
                 links = WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="form1"]/table[1]/tbody/tr/td/table[3]/tbody/tr/td[7]/a')))
@@ -214,8 +233,13 @@ def govspend(st_date, en_date, project_number, file_name):
                                 contact_date = winner_detail[5].text
 
                                 contact_price = winner_detail[6].text
-                                contact_price = contact_price.replace(',','')
-                                contact_price = float(contact_price)
+
+                                if contact_price == '' or re.match(r'\s',contact_price):
+                                    contact_price = 0
+
+                                else:    
+                                    contact_price = contact_price.replace(',','')
+                                    contact_price = float(contact_price)
 
                                 contact_status = winner_detail[7].text
                                 description = winner_detail[8].text
@@ -304,25 +328,29 @@ def govspend(st_date, en_date, project_number, file_name):
                     if len(btn) > 0:
                         page = btn[0]
                         if page == 7:
-                            print(f"------ Get {len(Govspend)} out of {str(no_of_proj*50)} ------")
-                            change_page = driver.find_elements(By.XPATH, '/html/body/form/table[1]/tbody/tr/td/table[4]/tbody/tr/td[2]/div/table/tbody/tr/td')
-                            change_page[7].click()
-                            btn=[2,3,4,5,6,7]
-                            sleep(60)
+                            try:
+                                tb = driver.find_element(By.XPATH, '/html/body/form/table[1]/tbody/tr/td/table[4]/tbody/tr/td[2]/div/table/tbody/tr/td[8]/b')
+                                if tb.is_displayed():
+                                    tb.click()
+                                    print("-----------------> Next")
+                                    btn=[2,3,4,5,6,7]
+                                    sleep(30)
+                            except:
+                                fb = driver.find_element(By.XPATH, '/html/body/form/table[1]/tbody/tr/td/table[4]/tbody/tr/td[2]/div/table/tbody/tr/td[8]/font')
+                                if fb.is_displayed():
+                                    print("XXXXXXXX    Stop   XXXXXXXX")
+                                    check += 1
+                                    break
                             
                         elif page != 7:
                             change_page = driver.find_elements(By.XPATH, '/html/body/form/table[1]/tbody/tr/td/table[4]/tbody/tr/td[2]/div/table/tbody/tr/td')
                             change_page[page].click()
                             
 
-            check+=1
             
         rdf = pd.DataFrame(Govspend)
-        # with open(r'C:\Users\Peera\Desktop\DSI_Intern\Data\test.json', 'w', encoding='utf-8') as file:
-        #     df.to_json(file, orient='table' ,index=False, force_ascii=False)
         rdf.to_excel(rf'.\sele\Data\{file_name}.xlsx', index = False, header=True)
         sleep(5)
-        # t_df = pd.read_excel(r'C:\Users\Peera\Desktop\DSI_Intern\Data\test03.xlsx')
         df = pd.read_excel(rf'.\sele\Data\{file_name}.xlsx')
 
         gov = []
@@ -487,5 +515,4 @@ def govspend(st_date, en_date, project_number, file_name):
         print('Finished Scraping')
         driver.quit()
 
-# govspend(st_date='01122562', en_date='01012563', project_number=1, save_loc=r'C:\Users\Peera\Desktop\DSI_Intern\Data', file_name='test05.xlsx')
 
