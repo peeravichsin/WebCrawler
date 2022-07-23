@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkcalendar import DateEntry
 import SemiAuto_sele, DBD_coltd, DBD_plc, DBD_lp
-
-
 
 
 class SampleApp(tk.Tk):
@@ -56,16 +55,12 @@ class PageOne(tk.Frame):
 
         tk.Label(self, bg='#EEEED5', fg='#000000',text="กรมบัญชีกลาง", font=("Tahoma",30)).pack(side="top", fill="x", pady=10)
 
-        tk.Label(self, bg='#EEEED5', fg='#000000',text="จำนวนโครงการ", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
-        pno = tk.Entry(self, width=30, font=("Tahoma",20)) 
-        pno.pack(side="top", fill="x", pady=10)
-
         tk.Label(self, bg='#EEEED5', fg='#000000',text="วันที่ต้องการจะเริ่มดึงข้อมูล", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
-        sdate = tk.Entry(self,  width=30, font=("Tahoma",20)) 
+        sdate = DateEntry(self,  width=30, font=("Tahoma",20)) 
         sdate.pack(side="top", fill="x", pady=10)
 
         tk.Label(self, bg='#EEEED5', fg='#000000',text="วันสุดท้ายต้องการจะดึงข้อมูล", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
-        edate = tk.Entry(self,  width=30, font=("Tahoma",20)) 
+        edate = DateEntry(self,  width=30, font=("Tahoma",20)) 
         edate.pack(side="top", fill="x", pady=10)
 
         tk.Label(self, bg='#EEEED5', fg='#000000',text="ชื่อไฟล์ที่ต้องการบันทึก", font=("Tahoma",18)).pack(side="top", fill="x", pady=10)
@@ -73,7 +68,7 @@ class PageOne(tk.Frame):
         fname.pack(side="top", fill="x", pady=10)
 
         tk.Button(self, bg='#4682B4', fg='#FFFAFA',text="เริ่มดึงข้อมูล", font=("Tahoma",18),
-                  command=lambda: SemiAuto_sele.govspend(st_date = sdate.get(), en_date=edate.get(), project_number = pno.get(), file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
+                  command=lambda: SemiAuto_sele.govspend(st_date = sdate.get_date(), en_date=edate.get_date(), file_name = fname.get())).pack(side='top', ipadx=10, ipady=10)
         
         tk.Button(self, text="กลับ", font=("Tahoma",18),
                   command=lambda: master.switch_frame(StartPage)).pack(side='top', pady=30, ipadx=10, ipady=10)
