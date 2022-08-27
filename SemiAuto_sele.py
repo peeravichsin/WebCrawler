@@ -4,10 +4,11 @@ from datetime import date as dadadate
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from time import sleep
+from Format_data import format_data
 import datetime
 def govspend(st_date, en_date, file_name):
     PATH = r'.\Cdriver\chromedriver.exe'
@@ -196,6 +197,12 @@ def govspend(st_date, en_date, file_name):
                             buy_date = 'ไม่มีข้อมูล'
                             send_date = 'ไม่มีข้อมูล'
 
+                        except TimeoutException:
+                            print('เกิดข้อผิดพลาดในการดาวน์โหลด หน้า ข้อมูลรายชื่อผู้ยื่นเอกสาร ')
+                            print('Saving...')
+                            rdf = pd.DataFrame(Govspend)
+                            rdf.to_excel(f'{file_name}.xlsx', index = False, header=True)
+                            format_data(file_name)
                 #         # print('<------------ ข้อมูลรายชื่อผู้ยื่นเอกสาร ------------>')
                 #         # print(applicants)
                             
@@ -217,7 +224,12 @@ def govspend(st_date, en_date, file_name):
                         except NoSuchElementException:
                             corp_pass = 'ไม่มีข้อมูล'
                             
-                        
+                        except TimeoutException:
+                            print('เกิดข้อผิดพลาดในการดาวน์โหลด หน้า ข้อมูลรายชื่อผู้ผ่านการพิจารณาคุณสมบัติและเทคนิค ')
+                            print('Saving...')
+                            rdf = pd.DataFrame(Govspend)
+                            rdf.to_excel(f'{file_name}.xlsx', index = False, header=True)
+                            format_data(file_name)
 
                     elif j == 'ข้อมูลสาระสำคัญในสัญญา':
                         try:
@@ -280,6 +292,13 @@ def govspend(st_date, en_date, file_name):
                             bidder_tin = bidding_detail
                             bidder = bidding_detail
                             bid_price = bidding_detail
+
+                        except TimeoutException:
+                            print('เกิดข้อผิดพลาดในการดาวน์โหลด หน้า ข้อมูลสาระสำคัญในสัญญา ')
+                            print('Saving...')
+                            rdf = pd.DataFrame(Govspend)
+                            rdf.to_excel(f'{file_name}.xlsx', index = False, header=True)
+                            format_data(file_name)
                 driver.back()
                 scrap_date = datetime.datetime.now()
                 scrap_date = scrap_date.strftime("%d/%m/%Y")
@@ -349,9 +368,9 @@ def govspend(st_date, en_date, file_name):
 
             
         rdf = pd.DataFrame(Govspend)
-        rdf.to_excel(rf'.\sele\Data\{file_name}.xlsx', index = False, header=True)
+        rdf.to_excel(f'{file_name}.xlsx', index = False, header=True)
         sleep(5)
-        df = pd.read_excel(rf'.\sele\Data\{file_name}.xlsx')
+        df = pd.read_excel(f'{file_name}.xlsx')
 
         gov = []
         for i in range(len(df)):
@@ -509,7 +528,16 @@ def govspend(st_date, en_date, file_name):
                 gov2.append(detail)
         
         g2df = pd.DataFrame(gov2)
-        g2df.to_excel(rf'.\sele\Data\{file_name}.xlsx', index = False, header=True)
+        g2df.to_excel(f'{file_name}.xlsx', index = False, header=True)
+
+
+    except TimeoutException:
+        print('เกิดข้อผิดพลาดในการดาวน์โหลด หน้าถัดไป ')
+        print('Saving...')
+        rdf = pd.DataFrame(Govspend)
+        rdf.to_excel(f'{file_name}.xlsx', index = False, header=True)
+        format_data(file_name)
+
 
     finally:
         print('Finished Scraping')
