@@ -131,6 +131,11 @@ def govspend(st_date, en_date, file_name):
                 proj_type = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, '//*[@id="trGovStatus"]/td[2]/input'))).get_attribute("value")
                 province = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, '//*[@id="moiName"]'))).get_attribute("value")
                 
+                proj_money = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, '//*[@id="trProjectMoney"]/td[2]/input'))).get_attribute("value")
+                proj_money = proj_money.replace(',','')
+                proj_money = float(proj_money)
+
+
                 proj_cost = WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.XPATH, '//*[@id="trPriceBuild"]/td[2]/input'))).get_attribute("value")
                 proj_cost = proj_cost.replace(',','')
                 proj_cost = float(proj_cost)
@@ -312,6 +317,7 @@ def govspend(st_date, en_date, file_name):
                             "typ_name" : provide_type,           #ประเภทการจัดหา
                             "proj_type" : proj_type,             #ประเภทโครงการ
                             "province" : province,               #จังหวัด
+                            "proj_money" :  proj_money,          #งบประมาณ
                             "proj_cost" : proj_cost,             #ราคากลาง
                             "proj_status" : proj_status,         #สถานะโครงการ
                             "applicants" : applicants ,          #รายชื่อผู้ยื่น
@@ -376,12 +382,12 @@ def govspend(st_date, en_date, file_name):
         for i in range(len(df)):
             ds_date = {}
             if df.iloc[i][1] != 'ไม่มีข้อมูล':
-                    applicants = df.iloc[i][9].strip("'][").split(', ')
-                    buy_date = df.iloc[i][13].strip("'][").split(', ')
-                    send_date = df.iloc[i][14].strip("'][").split(', ')
-                    bidder_tin = df.iloc[i][11].strip("'][").split(', ')
-                    bidder = df.iloc[i][12].strip("'][").split(', ')
-                    bid_price =	df.iloc[i][15].strip("'][").split(', ')
+                    applicants = df.iloc[i][10].strip("'][").split(', ')
+                    buy_date = df.iloc[i][14].strip("'][").split(', ')
+                    send_date = df.iloc[i][15].strip("'][").split(', ')
+                    bidder_tin = df.iloc[i][12].strip("'][").split(', ')
+                    bidder = df.iloc[i][13].strip("'][").split(', ')
+                    bid_price =	df.iloc[i][16].strip("'][").split(', ')
                             
                     for j in range(len(bidder)):
                         detail = {
@@ -392,24 +398,25 @@ def govspend(st_date, en_date, file_name):
                                     "typ_name" : df.iloc[i][4],                                     #ประเภทการจัดหา
                                     "proj_type" : df.iloc[i][5],                                    #ประเภทโครงการ
                                     "province" : df.iloc[i][6],                                     #จังหวัด
-                                    "proj_cost" : df.iloc[i][7],                                    #ราคากลาง
-                                    "proj_status" : df.iloc[i][8],                                  #สถานะโครงการ
-                                    "applicants" : df.iloc[i][9],                                   #ผู้ยื่นราคา
-                                    "buy_date" : df.iloc[i][13],                                    #วันที่รับซื้อเอกสาร
-                                    "send_date" : df.iloc[i][14],                                   #วันที่ยื่นเอกสาร
+                                    "proj_money" : df.iloc[i][7],                                   #งบประมาณ   
+                                    "proj_cost" : df.iloc[i][8],                                    #ราคากลาง
+                                    "proj_status" : df.iloc[i][9],                                  #สถานะโครงการ
+                                    "applicants" : df.iloc[i][10],                                   #ผู้ยื่นราคา
+                                    "buy_date" : df.iloc[i][14],                                    #วันที่รับซื้อเอกสาร
+                                    "send_date" : df.iloc[i][15],                                   #วันที่ยื่นเอกสาร
                                     "bidder_tin" : bidder_tin[j].replace("'","").strip(),           #เลขที่เสียภาษีชื่อผู้เสนอราคา
                                     "bidder" : bidder[j].replace("'","").strip(),                   #ชื่อผู้เสนอ
                                     "bid_price" : bid_price[j].replace("'","").strip(),             #ราคาที่เสนอ
-                                    "corp_pass" : df.iloc[i][10],                                   #ผู้ผ่านการคัดเลือก
-                                    "win_tin" : df.iloc[i][16],                                     #เลขที่เสียภาษีของผู้ชนะ
-                                    "winner" : df.iloc[i][17],                                      #ชื่อผู้ชนะ
-                                    "eGP_no" : df.iloc[i][18],                                      #เลขคุมสัญญาในระบบ e-GP
-                                    "contact_no" : df.iloc[i][19],                                  #เลขที่สัญญา
-                                    "contact_date" : df.iloc[i][20],                                #วันที่ทำสัญญา
-                                    "contact_price" : df.iloc[i][21],                               #จำนวนเงิน
-                                    "contact_status" : df.iloc[i][22],                              #สถานะสัญญา
-                                    "descr" : df.iloc[i][23],                                       #เหตุผล
-                                    "scrap_date" : df.iloc[i][24]                                   #วันที่ดึงข้อมูล
+                                    "corp_pass" : df.iloc[i][11],                                   #ผู้ผ่านการคัดเลือก
+                                    "win_tin" : df.iloc[i][17],                                     #เลขที่เสียภาษีของผู้ชนะ
+                                    "winner" : df.iloc[i][18],                                      #ชื่อผู้ชนะ
+                                    "eGP_no" : df.iloc[i][19],                                      #เลขคุมสัญญาในระบบ e-GP
+                                    "contact_no" : df.iloc[i][20],                                  #เลขที่สัญญา
+                                    "contact_date" : df.iloc[i][21],                                #วันที่ทำสัญญา
+                                    "contact_price" : df.iloc[i][22],                               #จำนวนเงิน
+                                    "contact_status" : df.iloc[i][23],                              #สถานะสัญญา
+                                    "descr" : df.iloc[i][24],                                       #เหตุผล
+                                    "scrap_date" : df.iloc[i][25]                                   #วันที่ดึงข้อมูล
                                     }
                         # print(detail)
                         gov.append(detail)
@@ -422,24 +429,25 @@ def govspend(st_date, en_date, file_name):
                                     "typ_name" : df.iloc[i][4],                                     #ประเภทการจัดหา
                                     "proj_type" : df.iloc[i][5],             #ประเภทโครงการ
                                     "province" : df.iloc[i][6],               #จังหวัด
-                                    "proj_cost" : df.iloc[i][7],             #ราคากลาง
-                                    "proj_status" : df.iloc[i][8],         #สถานะโครงการ
-                                    "applicants" : df.iloc[i][9],           #ผู้ยื่นราคา
-                                    "corp_pass"  :  df.iloc[i][10],        #ผู้ผ่านการคัดเลือก
-                                    "buy_date" : df.iloc[i][13],               #วันที่รับซื้อเอกสาร
-                                    "send_date" : df.iloc[i][14],             #วันที่ยื่นเอกสาร
-                                    "bidder_tin" : df.iloc[i][11],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
-                                    "bidder" : df.iloc[i][12],                   #ชื่อผู้เสนอ
-                                    "bid_price" : df.iloc[i][15],             #ราคาที่เสนอ
-                                    "win_tin" : df.iloc[i][16],                 #เลขที่เสียภาษีของผู้ชนะ
-                                    "winner" : df.iloc[i][17],                   #ชื่อผู้ชนะ
-                                    "eGP_no" : df.iloc[i][18],                   #เลขคุมสัญญาในระบบ e-GP
-                                    "contact_no" : df.iloc[i][19],           #เลขที่สัญญา
-                                    "contact_date" : df.iloc[i][20],       #วันที่ทำสัญญา
-                                    "contact_price" : df.iloc[i][21],     #จำนวนเงิน
-                                    "contact_status" : df.iloc[i][22],   #สถานะสัญญา
-                                    "descr" : df.iloc[i][23],               #เหตุผล
-                                    "scrap_date" : df.iloc[i][24]            #วันที่ดึงข้อมูล
+                                    "proj_money" : df.iloc[i][7],                                   #งบประมาณ
+                                    "proj_cost" : df.iloc[i][8],             #ราคากลาง
+                                    "proj_status" : df.iloc[i][9],         #สถานะโครงการ
+                                    "applicants" : df.iloc[i][10],           #ผู้ยื่นราคา
+                                    "corp_pass"  :  df.iloc[i][11],        #ผู้ผ่านการคัดเลือก
+                                    "buy_date" : df.iloc[i][14],               #วันที่รับซื้อเอกสาร
+                                    "send_date" : df.iloc[i][15],             #วันที่ยื่นเอกสาร
+                                    "bidder_tin" : df.iloc[i][12],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
+                                    "bidder" : df.iloc[i][13],                   #ชื่อผู้เสนอ
+                                    "bid_price" : df.iloc[i][14],             #ราคาที่เสนอ
+                                    "win_tin" : df.iloc[i][17],                 #เลขที่เสียภาษีของผู้ชนะ
+                                    "winner" : df.iloc[i][18],                   #ชื่อผู้ชนะ
+                                    "eGP_no" : df.iloc[i][19],                   #เลขคุมสัญญาในระบบ e-GP
+                                    "contact_no" : df.iloc[i][20],           #เลขที่สัญญา
+                                    "contact_date" : df.iloc[i][21],       #วันที่ทำสัญญา
+                                    "contact_price" : df.iloc[i][22],     #จำนวนเงิน
+                                    "contact_status" : df.iloc[i][23],   #สถานะสัญญา
+                                    "descr" : df.iloc[i][24],               #เหตุผล
+                                    "scrap_date" : df.iloc[i][25]            #วันที่ดึงข้อมูล
                                     }
                 # print(detail)
                 gov.append(detail)
@@ -450,14 +458,16 @@ def govspend(st_date, en_date, file_name):
             ds_date = {}
             if gdf.iloc[i][1] != 'ไม่มีข้อมูล':
                 No_pro = gdf.iloc[i][0]
-                applicants = gdf.iloc[i][9].strip("'][").split(', ')
-                buy_date = gdf.iloc[i][10].strip("'][").split(', ')
-                send_date = gdf.iloc[i][11].strip("'][").split(', ')
-                corp_pass = gdf.iloc[i][15].strip("'][").split(', ')
+                applicants = gdf.iloc[i][10].strip("'][").split(', ')
+                buy_date = gdf.iloc[i][11].strip("'][").split(', ')
+                send_date = gdf.iloc[i][12].strip("'][").split(', ')
+                corp_pass = gdf.iloc[i][16].strip("'][").split(', ')
                 corp_pass =[corp_pass[i].replace("'","").strip() for i in range((len(corp_pass)))]
             
                 ds_date = { applicants[i].replace("'","").strip() :  [buy_date[i].replace("'","").strip(),  send_date[i].replace("'","").strip()]  for i in range(len(applicants)) }
-                bidder = gdf.iloc[i][13]
+                bidder = gdf.iloc[i][14]
+                # print(f'B : {bidder}')
+                # print(f'c : {corp_pass}')
                 if bidder in corp_pass:
                     pass_stat = True
                 else:
@@ -465,7 +475,7 @@ def govspend(st_date, en_date, file_name):
 
                 for key,value in ds_date.items():
                     if key.startswith(f'{bidder}'):
-                        date = ds_date[key]
+                        ds_date[key]
                 
                 detail = {
                                     "proj_no" : gdf.iloc[i][0],                 #เลขที่โครงการ
@@ -475,26 +485,26 @@ def govspend(st_date, en_date, file_name):
                                     "typ_name" : gdf.iloc[i][4],           #ประเภทการจัดหา
                                     "proj_type" : gdf.iloc[i][5],             #ประเภทโครงการ
                                     "province" : gdf.iloc[i][6],               #จังหวัด
-                                    "proj_cost" : gdf.iloc[i][7],             #ราคากลาง
-                                    "proj_status" : gdf.iloc[i][8],         #สถานะโครงการ
-                                    # "applicants" : df.iloc[i][9],           #ผู้ยื่นราคา
+                                    "proj_money" : gdf.iloc[i][7],              #งบประมาณ
+                                    "proj_cost" : gdf.iloc[i][8],             #ราคากลาง
+                                    "proj_status" : gdf.iloc[i][9],         #สถานะโครงการ
                                     "corp_pass"  :  pass_stat,        #ผู้ผ่านการคัดเลือก
-                                    "buy_date" : date[0],               #วันที่รับซื้อเอกสาร
-                                    "send_date" : date[1],             #วันที่ยื่นเอกสาร
-                                    "bidder_tin" : gdf.iloc[i][12],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
-                                    "bidder" : gdf.iloc[i][13],                   #ชื่อผู้เสนอ
-                                    "bid_price" : gdf.iloc[i][14],             #ราคาที่เสนอ
-                                    "win_tin" : gdf.iloc[i][16],                 #เลขที่เสียภาษีของผู้ชนะ
-                                    "winner" : gdf.iloc[i][17],                   #ชื่อผู้ชนะ
-                                    "eGP_no" : gdf.iloc[i][18],                   #เลขคุมสัญญาในระบบ e-GP
-                                    "contact_no" : gdf.iloc[i][19],           #เลขที่สัญญา
-                                    "contact_date" : gdf.iloc[i][20],       #วันที่ทำสัญญา
-                                    "contact_price" : gdf.iloc[i][21],     #จำนวนเงิน
-                                    "contact_status" : gdf.iloc[i][22],   #สถานะสัญญา
-                                    "descr" : gdf.iloc[i][23],               #เหตุผล
-                                    "scrap_date" : gdf.iloc[i][24]            #วันที่ดึงข้อมูล
+                                    "buy_date" : ds_date[key][0],               #วันที่รับซื้อเอกสาร
+                                    "send_date" : ds_date[key][1],             #วันที่ยื่นเอกสาร
+                                    "bidder_tin" : gdf.iloc[i][13],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
+                                    "bidder" : gdf.iloc[i][14],                   #ชื่อผู้เสนอ
+                                    "bid_price" : gdf.iloc[i][15],             #ราคาที่เสนอ
+                                    "win_tin" : gdf.iloc[i][17],                 #เลขที่เสียภาษีของผู้ชนะ
+                                    "winner" : gdf.iloc[i][18],                   #ชื่อผู้ชนะ
+                                    "eGP_no" : gdf.iloc[i][19],                   #เลขคุมสัญญาในระบบ e-GP
+                                    "contact_no" : gdf.iloc[i][20],           #เลขที่สัญญา
+                                    "contact_date" : gdf.iloc[i][21],       #วันที่ทำสัญญา
+                                    "contact_price" : gdf.iloc[i][22],     #จำนวนเงิน
+                                    "contact_status" : gdf.iloc[i][23],   #สถานะสัญญา
+                                    "descr" : gdf.iloc[i][24],               #เหตุผล
+                                    "scrap_date" : gdf.iloc[i][25]            #วันที่ดึงข้อมูล
                                     }
-                # print(detail)
+                print(detail)
                 gov2.append(detail)
             elif gdf.iloc[i][1] == 'ไม่มีข้อมูล':
                 detail = {
@@ -505,24 +515,24 @@ def govspend(st_date, en_date, file_name):
                                     "typ_name" : gdf.iloc[i][4],           #ประเภทการจัดหา
                                     "proj_type" : gdf.iloc[i][5],             #ประเภทโครงการ
                                     "province" : gdf.iloc[i][6],               #จังหวัด
-                                    "proj_cost" : gdf.iloc[i][7],             #ราคากลาง
-                                    "proj_status" : gdf.iloc[i][8],         #สถานะโครงการ
-                                    # "applicants" : gdf.iloc[i][9],           #ผู้ยื่นราคา
-                                    "corp_pass"  :  gdf.iloc[i][10],        #ผู้ผ่านการคัดเลือก
-                                    "buy_date" : gdf.iloc[i][13],               #วันที่รับซื้อเอกสาร
-                                    "send_date" : gdf.iloc[i][14],             #วันที่ยื่นเอกสาร
-                                    "bidder_tin" : gdf.iloc[i][11],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
-                                    "bidder" : gdf.iloc[i][12],                   #ชื่อผู้เสนอ
-                                    "bid_price" : gdf.iloc[i][15],             #ราคาที่เสนอ
-                                    "win_tin" : gdf.iloc[i][16],                 #เลขที่เสียภาษีของผู้ชนะ
-                                    "winner" : gdf.iloc[i][17],                   #ชื่อผู้ชนะ
-                                    "eGP_no" : gdf.iloc[i][18],                   #เลขคุมสัญญาในระบบ e-GP
-                                    "contact_no" : gdf.iloc[i][19],           #เลขที่สัญญา
-                                    "contact_date" : gdf.iloc[i][20],       #วันที่ทำสัญญา
-                                    "contact_price" : gdf.iloc[i][21],     #จำนวนเงิน
-                                    "contact_status" : gdf.iloc[i][22],   #สถานะสัญญา
-                                    "descr" : gdf.iloc[i][23],               #เหตุผล
-                                    "scrap_date" : gdf.iloc[i][24]            #วันที่ดึงข้อมูล
+                                    "proj_money" : gdf.iloc[i][7],                                   #งบประมาณ
+                                    "proj_cost" : gdf.iloc[i][8],             #ราคากลาง
+                                    "proj_status" : gdf.iloc[i][9],         #สถานะโครงการ
+                                    "corp_pass"  :  gdf.iloc[i][11],        #ผู้ผ่านการคัดเลือก
+                                    "buy_date" : gdf.iloc[i][14],               #วันที่รับซื้อเอกสาร
+                                    "send_date" : gdf.iloc[i][15],             #วันที่ยื่นเอกสาร
+                                    "bidder_tin" : gdf.iloc[i][12],           #เลขที่เสียภาษีชื่อผู้เสนอราคา
+                                    "bidder" : gdf.iloc[i][13],                   #ชื่อผู้เสนอ
+                                    "bid_price" : gdf.iloc[i][14],             #ราคาที่เสนอ
+                                    "win_tin" : gdf.iloc[i][17],                 #เลขที่เสียภาษีของผู้ชนะ
+                                    "winner" : gdf.iloc[i][18],                   #ชื่อผู้ชนะ
+                                    "eGP_no" : gdf.iloc[i][19],                   #เลขคุมสัญญาในระบบ e-GP
+                                    "contact_no" : gdf.iloc[i][20],           #เลขที่สัญญา
+                                    "contact_date" : gdf.iloc[i][21],       #วันที่ทำสัญญา
+                                    "contact_price" : gdf.iloc[i][22],     #จำนวนเงิน
+                                    "contact_status" : gdf.iloc[i][23],   #สถานะสัญญา
+                                    "descr" : gdf.iloc[i][24],               #เหตุผล
+                                    "scrap_date" : gdf.iloc[i][25]            #วันที่ดึงข้อมูล
                                     }
                 # print(detail)
                 gov2.append(detail)

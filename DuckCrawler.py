@@ -132,4 +132,5 @@ class PageFour(tk.Frame):
 
 if __name__ == "__main__":
     app = SampleApp()
+    app.iconbitmap(r'C:\Users\Peera\Desktop\DSI_infinite\icon\Duckle.ico')
     app.mainloop()

@@ -2,6 +2,8 @@ import pandas as pd
 
 def format_data(file_name):
     df = pd.read_excel(f'{file_name}.xlsx')
+    if df.isnull().values.any():
+        df.drop(df.index[len(df)-1], axis=0, inplace=True)
     gov = []
     for i in range(len(df)):
         ds_date = {}
@@ -128,7 +130,7 @@ def format_data(file_name):
                                 "descr" : gdf.iloc[i][24],               #เหตุผล
                                 "scrap_date" : gdf.iloc[i][25]            #วันที่ดึงข้อมูล
                                 }
-            print(detail)
+            # print(detail)
             gov2.append(detail)
         elif gdf.iloc[i][1] == 'ไม่มีข้อมูล':
             detail = {
@@ -158,7 +160,7 @@ def format_data(file_name):
                                 "descr" : gdf.iloc[i][24],               #เหตุผล
                                 "scrap_date" : gdf.iloc[i][25]            #วันที่ดึงข้อมูล
                                 }
-            print(detail)
+            # print(detail)
             gov2.append(detail)
     
     g2df = pd.DataFrame(gov2)

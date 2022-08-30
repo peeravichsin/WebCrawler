@@ -12,7 +12,7 @@ import pandas as pd
 
 def coltd(file_name):
     # For using Chrome
-    browser = webdriver.Chrome(r'.Cdriver\chromedriver.exe')
+    browser = webdriver.Chrome(r'.\Cdriver\chromedriver.exe')
     action = webdriver.ActionChains(browser)
 
 
